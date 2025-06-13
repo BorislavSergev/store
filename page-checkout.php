@@ -19,13 +19,9 @@ get_header('shop');
 do_action('woocommerce_before_main_content');
 ?>
 
-<!-- ========================================================= -->
-<!-- === START: CRITICAL FIX FOR VISIBILITY === -->
-<!-- ========================================================= -->
 <style>
     /*
      * This CSS is a fallback. The main fix is in the JavaScript below.
-     * This ensures that on initial page load, the fields are not hidden by a stylesheet.
     */
     .woocommerce-billing-fields {
         display: block !important;
@@ -35,10 +31,6 @@ do_action('woocommerce_before_main_content');
         margin-bottom: 30px !important;
     }
 </style>
-<!-- ======================================================= -->
-<!-- === END: CRITICAL FIX === -->
-<!-- ======================================================= -->
-
 
 <div class="modern-checkout-container">
     <div class="checkout-shapes">
@@ -396,38 +388,41 @@ do_action('woocommerce_before_main_content');
 <!-- === START: JAVASCRIPT FIX FOR FIELD VISIBILITY === -->
 <!-- ============================================= -->
 <script>
-jQuery(document).ready(function($) {
+jQuery(function($) { // Use the standard shorthand for document.ready
 
     /**
-     * This function forces the billing fields to be visible.
-     * It's designed to counteract other plugins (like Econt) that
-     * might be hiding the entire section via JavaScript.
+     * This function uses a timed delay to force the billing fields to be visible.
+     * It's designed to run *after* other plugins (like Econt) have finished
+     * hiding the address section.
      */
-    function forceShowBillingFields() {
-        // Find the main container for the billing fields.
-        var $billingFields = $('.woocommerce-billing-fields');
-
-        // If the container exists, force it and its content to be visible.
-        if ($billingFields.length) {
-            $billingFields.show().css({
-                'display': 'block',
-                'opacity': '1',
-                'height': 'auto',
-                'overflow': 'visible'
-            });
-        }
+    function showBillingFieldsWithDelay() {
+        setTimeout(function() {
+            var $billingFields = $('.woocommerce-billing-fields');
+            
+            // We only act if the fields container exists but is not visible
+            if ($billingFields.length && !$billingFields.is(':visible')) {
+                $billingFields.show().css({
+                    'display': 'block',
+                    'opacity': '1',
+                    'height': 'auto',
+                    'overflow': 'visible'
+                });
+                // This message will appear in your browser's console (F12) to confirm the fix is running
+                console.log('Shoes Store Theme Fix: Billing fields were hidden and are now forced to be visible.');
+            }
+        }, 150); // A small delay of 150ms to ensure this runs last.
     }
 
     // --- Main Execution ---
 
-    // 1. Run the function immediately when the page is ready.
-    forceShowBillingFields();
+    // 1. Run the function on initial page load, after a short delay.
+    showBillingFieldsWithDelay();
 
     // 2. IMPORTANT: Run the function again every time the checkout updates.
-    // This is crucial because the Econt plugin likely hides the fields
-    // when the shipping method is changed. This will show them again.
+    // This is the most crucial part for handling shipping method changes.
     $(document.body).on('updated_checkout', function() {
-        forceShowBillingFields();
+        console.log('Shoes Store Theme Fix: Checkout updated. Re-checking billing fields visibility.');
+        showBillingFieldsWithDelay();
     });
 
 });
