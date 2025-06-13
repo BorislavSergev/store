@@ -3,7 +3,8 @@
  * Template Name: Checkout Page
  *
  * This template overrides the WooCommerce checkout page and is now updated
- * to support the "Checkout Field Editor for WooCommerce" by ThemeHigh.
+ * to support the "Checkout Field Editor for WooCommerce" by ThemeHigh
+ * and a new color scheme.
  *
  * @package Shoes_Store_Theme
  */
@@ -142,7 +143,7 @@ do_action('woocommerce_before_main_content');
 </div>
 
 <style>
-/* Modern Checkout Styles */
+/* Modern Checkout Styles - COLOR SCHEME UPDATED TO #e74c3c */
 .modern-checkout-container {
     background-color: #f9f9f9;
     padding: 40px 0;
@@ -174,7 +175,7 @@ do_action('woocommerce_before_main_content');
     right: -5%;
     width: 500px;
     height: 500px;
-    background: #8e44ad;
+    background: #e74c3c; /* CHANGED COLOR */
     border-radius: 50%;
     animation: floatAnimation 10s ease-in-out infinite;
 }
@@ -184,7 +185,7 @@ do_action('woocommerce_before_main_content');
     left: -10%;
     width: 600px;
     height: 600px;
-    background: #e74c3c;
+    background: #f39c12; /* Kept secondary color for contrast */
     border-radius: 50%;
     animation: floatAnimation 12s ease-in-out infinite 1s;
 }
@@ -194,7 +195,7 @@ do_action('woocommerce_before_main_content');
     right: 15%;
     width: 300px;
     height: 300px;
-    background: #3498db;
+    background: #3498db; /* Kept secondary color for contrast */
     border-radius: 50%;
     animation: floatAnimation 8s ease-in-out infinite 0.5s;
 }
@@ -231,7 +232,7 @@ do_action('woocommerce_before_main_content');
     left: 0;
     width: 80px;
     height: 3px;
-    background: #8e44ad;
+    background: #e74c3c; /* CHANGED COLOR */
     border-radius: 3px;
 }
 
@@ -287,13 +288,13 @@ do_action('woocommerce_before_main_content');
 
 .checkout-feature i {
     font-size: 20px;
-    color: #8e44ad;
+    color: #e74c3c; /* CHANGED COLOR */
     width: 40px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(142, 68, 173, 0.1);
+    background: rgba(231, 76, 60, 0.1); /* CHANGED COLOR */
     border-radius: 50%;
 }
 
@@ -336,8 +337,8 @@ do_action('woocommerce_before_main_content');
 .form-row input:focus,
 .form-row select:focus,
 .form-row textarea:focus {
-    border-color: #8e44ad;
-    box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
+    border-color: #e74c3c; /* CHANGED COLOR */
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1); /* CHANGED COLOR */
     outline: none;
     background-color: #fff;
 }
@@ -361,8 +362,8 @@ do_action('woocommerce_before_main_content');
 }
 
 .woocommerce-shipping-methods li:hover {
-    border-color: #8e44ad;
-    background-color: #f8f4fa;
+    border-color: #e74c3c; /* CHANGED COLOR */
+    background-color: #fff9f8;
     transform: translateY(-2px);
 }
 
@@ -415,8 +416,8 @@ do_action('woocommerce_before_main_content');
 }
 
 .econt-notice .alert {
-    background-color: #f8f4fa;
-    border-left: 4px solid #8e44ad;
+    background-color: #fff9f8; /* CHANGED COLOR */
+    border-left: 4px solid #e74c3c; /* CHANGED COLOR */
     color: #333;
     padding: 18px;
     border-radius: 8px;
@@ -428,7 +429,7 @@ do_action('woocommerce_before_main_content');
 .econt-notice .alert i {
     font-size: 20px;
     margin-right: 15px;
-    color: #8e44ad;
+    color: #e74c3c; /* CHANGED COLOR */
 }
 
 .econt-notice .alert span {
@@ -456,9 +457,9 @@ html, body {
 .econt-delivery-options {
     margin-top: 20px;
     padding: 15px;
-    background-color: #f8f4fa;
+    background-color: #fff9f8; /* CHANGED COLOR */
     border-radius: 8px;
-    border: 1px solid rgba(142, 68, 173, 0.2);
+    border: 1px solid rgba(231, 76, 60, 0.2); /* CHANGED COLOR */
 }
 
 .econt-delivery-type {
@@ -491,17 +492,17 @@ html, body {
 
 .econt-delivery-type-option:hover,
 .econt-delivery-type-option.selected {
-    border-color: #8e44ad;
-    background-color: #f8f4fa;
+    border-color: #e74c3c; /* CHANGED COLOR */
+    background-color: #fff9f8; /* CHANGED COLOR */
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(142, 68, 173, 0.1);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.1); /* CHANGED COLOR */
 }
 
 .econt-delivery-type-option i {
     display: block;
     font-size: 24px;
     margin-bottom: 10px;
-    color: #8e44ad;
+    color: #e74c3c; /* CHANGED COLOR */
 }
 
 .econt-city-field {
@@ -511,7 +512,7 @@ html, body {
 .econt-loading {
     text-align: center;
     padding: 20px;
-    color: #8e44ad;
+    color: #e74c3c; /* CHANGED COLOR */
 }
 
 .econt-loading i {
