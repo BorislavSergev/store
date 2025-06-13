@@ -2,17 +2,15 @@
 /**
  * Template Name: Checkout Page
  *
- * This template overrides the WooCommerce checkout page and includes all fixes.
+ * This template overrides the WooCommerce checkout page and is now updated
+ * to support the "Checkout Field Editor for WooCommerce" by ThemeHigh.
  *
  * @package Shoes_Store_Theme
  */
 
 defined('ABSPATH') || exit;
 
-// === FIX 1: Remove WooCommerce Breadcrumbs for this page only ===
-remove_action('woocommerce_before_main_content', 'woocommerce_breadcrumb', 20);
-
-// Get the global checkout object, which is needed for the form
+// Get the global checkout object. This is essential for the hooks to work.
 $checkout = WC()->checkout();
 
 get_header('shop');
@@ -20,12 +18,14 @@ get_header('shop');
 do_action('woocommerce_before_main_content');
 ?>
 
-<!-- === FIX 2: This style block ensures the billing fields are always visible === -->
+<!-- ========================================================= -->
+<!-- === START: CRITICAL FIX FOR THEMEHIGH & ECONT PLUGINS === -->
+<!-- ========================================================= -->
 <style>
     /*
-     * This CSS is crucial. The Econt plugin or the theme likely hides the
-     * standard billing fields with 'display: none'. This rule overrides that,
-     * ensuring the billing address form is always visible and usable.
+     * This CSS is crucial. The Econt plugin often hides the entire address
+     * section. This rule forces the container for your custom ThemeHigh fields
+     * to be visible, overriding any 'display: none' from other plugins.
     */
     .woocommerce-billing-fields {
         display: block !important;
@@ -35,6 +35,10 @@ do_action('woocommerce_before_main_content');
         margin-bottom: 30px; /* Add some space below the billing form */
     }
 </style>
+<!-- ======================================================= -->
+<!-- === END: CRITICAL FIX === -->
+<!-- ======================================================= -->
+
 
 <div class="modern-checkout-container">
     <div class="checkout-shapes">
@@ -49,16 +53,18 @@ do_action('woocommerce_before_main_content');
                 <div class="checkout-header">
                     <h1 class="checkout-title"><?php the_title(); ?></h1>
                 </div>
-                
+
                 <?php do_action('woocommerce_before_checkout_form', $checkout); ?>
 
                 <?php
+                // If checkout registration is disabled and not logged in, the user cannot checkout.
                 if (!$checkout->is_registration_enabled() && $checkout->is_registration_required() && !is_user_logged_in()) {
                     echo esc_html(apply_filters('woocommerce_checkout_must_be_logged_in_message', __('You must be logged in to checkout.', 'woocommerce')));
                     return;
                 }
                 ?>
 
+                <!-- Econt Information Notice - UPDATED FOR CLARITY -->
                 <div class="econt-notice">
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle"></i>
@@ -72,25 +78,26 @@ do_action('woocommerce_before_main_content');
                         <div class="col-lg-7">
                             <div class="checkout-form-wrapper">
                                 <?php do_action('woocommerce_checkout_before_customer_details', $checkout); ?>
-                                
+
                                 <div class="customer-details" id="customer_details">
 
-                                    <!-- === FIX 3: Display the Billing Address Fields === -->
-                                    <div class="billing-details-section">
-                                        <?php do_action('woocommerce_checkout_billing', $checkout); ?>
-                                    </div>
-                                    
+                                    <!-- =========================================================== -->
+                                    <!-- THIS HOOK NOW TRIGGERS THE THEMEHIGH PLUGIN TO SHOW YOUR CUSTOM FIELDS -->
+                                    <!-- =========================================================== -->
+                                    <?php do_action('woocommerce_checkout_billing', $checkout); ?>
+                                    <!-- =========================================================== -->
+
                                     <?php if (WC()->cart->needs_shipping()) : ?>
                                         <div class="shipping-method-section">
                                             <h3>Метод на доставка</h3>
                                             <?php do_action('woocommerce_checkout_shipping', $checkout); ?>
                                         </div>
                                     <?php endif; ?>
-                                    
+
                                     <!-- This is the critical hook for Econt delivery options -->
                                     <?php do_action('woocommerce_review_order_after_shipping', $checkout); ?>
-                                    
-                                    <!-- Load your custom template for additional fields -->
+
+                                    <!-- Load your custom template for additional fields (Order Notes) -->
                                     <?php get_template_part('woocommerce/checkout/form-additional-fields'); ?>
 
                                 </div>
@@ -98,17 +105,17 @@ do_action('woocommerce_before_main_content');
                                 <?php do_action('woocommerce_checkout_after_customer_details', $checkout); ?>
                             </div>
                         </div>
-                        
+
                         <!-- Right Column - Order Summary -->
                         <div class="col-lg-5">
                             <div class="order-summary-wrapper">
                                 <h3 id="order_review_heading">Вашата поръчка</h3>
-                                
+
                                 <div id="order_review" class="woocommerce-checkout-review-order">
                                     <?php do_action('woocommerce_checkout_order_review'); ?>
                                 </div>
                             </div>
-                            
+
                             <!-- Checkout Features -->
                             <div class="checkout-features">
                                 <div class="checkout-feature">
@@ -134,14 +141,13 @@ do_action('woocommerce_before_main_content');
     </div>
 </div>
 
-<!-- === FIX 4 & 5: Updated CSS with new colors and height fix === -->
 <style>
 /* Modern Checkout Styles */
 .modern-checkout-container {
     background-color: #f9f9f9;
-    padding: 40px 0 0; /* FIX: Removed bottom padding to fix gap above footer */
+    padding: 40px 0;
     font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
     position: relative;
 }
 
@@ -168,7 +174,7 @@ do_action('woocommerce_before_main_content');
     right: -5%;
     width: 500px;
     height: 500px;
-    background: #e74c3c; /* COLOR CHANGE */
+    background: #8e44ad;
     border-radius: 50%;
     animation: floatAnimation 10s ease-in-out infinite;
 }
@@ -178,7 +184,7 @@ do_action('woocommerce_before_main_content');
     left: -10%;
     width: 600px;
     height: 600px;
-    background: #e74c3c; /* This was already the correct color */
+    background: #e74c3c;
     border-radius: 50%;
     animation: floatAnimation 12s ease-in-out infinite 1s;
 }
@@ -188,7 +194,7 @@ do_action('woocommerce_before_main_content');
     right: 15%;
     width: 300px;
     height: 300px;
-    background: #e74c3c; /* COLOR CHANGE */
+    background: #3498db;
     border-radius: 50%;
     animation: floatAnimation 8s ease-in-out infinite 0.5s;
 }
@@ -225,7 +231,7 @@ do_action('woocommerce_before_main_content');
     left: 0;
     width: 80px;
     height: 3px;
-    background: #e74c3c; /* COLOR CHANGE */
+    background: #8e44ad;
     border-radius: 3px;
 }
 
@@ -281,13 +287,13 @@ do_action('woocommerce_before_main_content');
 
 .checkout-feature i {
     font-size: 20px;
-    color: #e74c3c; /* COLOR CHANGE */
+    color: #8e44ad;
     width: 40px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(231, 76, 60, 0.1); /* COLOR CHANGE */
+    background: rgba(142, 68, 173, 0.1);
     border-radius: 50%;
 }
 
@@ -330,8 +336,8 @@ do_action('woocommerce_before_main_content');
 .form-row input:focus,
 .form-row select:focus,
 .form-row textarea:focus {
-    border-color: #e74c3c; /* COLOR CHANGE */
-    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1); /* COLOR CHANGE */
+    border-color: #8e44ad;
+    box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
     outline: none;
     background-color: #fff;
 }
@@ -354,10 +360,9 @@ do_action('woocommerce_before_main_content');
     align-items: center;
 }
 
-.woocommerce-shipping-methods li:hover,
-.woocommerce-shipping-methods li.selected { /* Added selected class for better UX */
-    border-color: #e74c3c; /* COLOR CHANGE */
-    background-color: #fdf5f3; /* COLOR CHANGE */
+.woocommerce-shipping-methods li:hover {
+    border-color: #8e44ad;
+    background-color: #f8f4fa;
     transform: translateY(-2px);
 }
 
@@ -410,8 +415,8 @@ do_action('woocommerce_before_main_content');
 }
 
 .econt-notice .alert {
-    background-color: #fdf5f3; /* COLOR CHANGE */
-    border-left: 4px solid #e74c3c; /* COLOR CHANGE */
+    background-color: #f8f4fa;
+    border-left: 4px solid #8e44ad;
     color: #333;
     padding: 18px;
     border-radius: 8px;
@@ -423,7 +428,7 @@ do_action('woocommerce_before_main_content');
 .econt-notice .alert i {
     font-size: 20px;
     margin-right: 15px;
-    color: #e74c3c; /* COLOR CHANGE */
+    color: #8e44ad;
 }
 
 .econt-notice .alert span {
@@ -451,9 +456,9 @@ html, body {
 .econt-delivery-options {
     margin-top: 20px;
     padding: 15px;
-    background-color: #fdf5f3; /* COLOR CHANGE */
+    background-color: #f8f4fa;
     border-radius: 8px;
-    border: 1px solid rgba(231, 76, 60, 0.2); /* COLOR CHANGE */
+    border: 1px solid rgba(142, 68, 173, 0.2);
 }
 
 .econt-delivery-type {
@@ -486,17 +491,17 @@ html, body {
 
 .econt-delivery-type-option:hover,
 .econt-delivery-type-option.selected {
-    border-color: #e74c3c; /* COLOR CHANGE */
-    background-color: #fdf5f3; /* COLOR CHANGE */
+    border-color: #8e44ad;
+    background-color: #f8f4fa;
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.1); /* COLOR CHANGE */
+    box-shadow: 0 5px 15px rgba(142, 68, 173, 0.1);
 }
 
 .econt-delivery-type-option i {
     display: block;
     font-size: 24px;
     margin-bottom: 10px;
-    color: #e74c3c; /* COLOR CHANGE */
+    color: #8e44ad;
 }
 
 .econt-city-field {
@@ -506,7 +511,7 @@ html, body {
 .econt-loading {
     text-align: center;
     padding: 20px;
-    color: #e74c3c; /* COLOR CHANGE */
+    color: #8e44ad;
 }
 
 .econt-loading i {
@@ -622,13 +627,11 @@ jQuery(document).ready(function($) {
     });
     
     // Handle shipping method selection
-    $('body').on('change', 'input[name="shipping_method[0]"]', function() {
-        $('input[name="shipping_method[0]"]').closest('li').removeClass('selected');
+    $('body').on('change', '.shipping_method', function() {
+        // Add active class to selected shipping method
         $(this).closest('li').addClass('selected');
+        $(this).closest('li').siblings().removeClass('selected');
     });
-    // Set initial selected state
-    $('input[name="shipping_method[0]"]:checked').closest('li').addClass('selected');
-
     
     // Compatibility with Econt plugin
     // This ensures that when the Econt delivery form is loaded, it gets proper styling
