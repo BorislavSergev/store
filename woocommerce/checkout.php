@@ -10,7 +10,9 @@
 
 defined('ABSPATH') || exit;
 
-get_header('shop');
+// Note: The original template had get_header('shop'), but checkout pages
+// typically use get_header('checkout'). If 'shop' works for you, keep it.
+get_header('shop'); 
 
 do_action('woocommerce_before_main_content');
 ?>
@@ -39,22 +41,33 @@ do_action('woocommerce_before_main_content');
                 }
                 ?>
 
-                <!-- Econt Information Notice -->
+                <!-- Econt Information Notice - UPDATED FOR CLARITY -->
                 <div class="econt-notice">
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle"></i>
-                        <span>Адресът за доставка ще бъде въведен чрез Econt формата за доставка след избор на метод за доставка.</span>
+                        <span>Моля, попълнете данните за фактуриране. Адресът за <strong>доставка</strong> ще бъде избран/въведен от формата на Econt по-долу.</span>
                     </div>
                 </div>
 
                 <form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url(wc_get_checkout_url()); ?>" enctype="multipart/form-data">
                     <div class="row">
-                        <!-- Left Column - Order Notes & Customer Details -->
+                        <!-- Left Column - Billing, Shipping Methods & Order Notes -->
                         <div class="col-lg-7">
                             <div class="checkout-form-wrapper">
                                 <?php do_action('woocommerce_checkout_before_customer_details'); ?>
                                 
                                 <div class="customer-details" id="customer_details">
+                                
+                                    <!-- ============================================= -->
+                                    <!-- === ADDED BILLING ADDRESS SECTION - START === -->
+                                    <!-- ============================================= -->
+                                    <div class="billing-details-section">
+                                        <?php do_action('woocommerce_checkout_billing', $checkout); ?>
+                                    </div>
+                                    <!-- =========================================== -->
+                                    <!-- === ADDED BILLING ADDRESS SECTION - END === -->
+                                    <!-- =========================================== -->
+
                                     <?php if (WC()->cart->needs_shipping()) : ?>
                                         <div class="shipping-method-section">
                                             <h3>Метод на доставка</h3>
@@ -66,20 +79,7 @@ do_action('woocommerce_before_main_content');
                                     <?php do_action('woocommerce_review_order_after_shipping'); ?>
                                     
                                     <div class="additional-details">
-                                        <h3>Допълнителна информация</h3>
-                                        <div class="woocommerce-additional-fields">
-                                            <?php do_action('woocommerce_before_order_notes', $checkout); ?>
-                                            
-                                            <?php if (apply_filters('woocommerce_enable_order_notes_field', 'yes' === get_option('woocommerce_enable_order_comments', 'yes'))) : ?>
-                                                <div class="woocommerce-additional-fields__field-wrapper">
-                                                    <?php foreach ($checkout->get_checkout_fields('order') as $key => $field) : ?>
-                                                        <?php woocommerce_form_field($key, $field, $checkout->get_value($key)); ?>
-                                                    <?php endforeach; ?>
-                                                </div>
-                                            <?php endif; ?>
-                                            
-                                            <?php do_action('woocommerce_after_order_notes', $checkout); ?>
-                                        </div>
+                                        <?php do_action('woocommerce_checkout_order_notes', $checkout); ?>
                                     </div>
                                 </div>
 
@@ -627,4 +627,4 @@ jQuery(document).ready(function($) {
 
 <?php
 get_footer('shop');
-?> 
+?>
